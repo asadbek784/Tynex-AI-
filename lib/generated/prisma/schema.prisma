@@ -1,0 +1,123 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../lib/generated/prisma"
+}
+
+model User {
+  id           String  @id @default(uuid())
+  email        String  @unique
+  passwordHash String? // Optional for OAuth users
+  name         String
+  role         String  @default("user") // "admin", "user"
+  banned       Boolean @default(false)
+
+  // OAuth integration
+  googleId    String? @unique
+  googleEmail String?
+  avatar      String?
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  chats         Chat[]
+  logs          UsageLog[]
+  rateHits      RateHit[]
+  refreshTokens RefreshToken[]
+}
+
+model Chat {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  chatId    String
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  role      String // "user" or "assistant"
+  content   String
+  hasCode   Boolean  @default(false)
+  imageUrl  String?
+  createdAt DateTime @default(now())
+}
+
+model AiProvider {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  baseUrl   String
+  apiKey    String // Always stored encrypted (AES-256-GCM) — decrypt only server-side right before use
+  models    AiModel[]
+  createdAt DateTime  @default(now())
+}
+
+model AiModel {
+  id          String     @id @default(uuid())
+  providerId  String
+  provider    AiProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+  modelId     String // e.g. "gpt-4o", "deepseek-chat"
+  displayName String
+  active      Boolean    @default(true)
+  priority    Int        @default(1)
+  createdAt   DateTime   @default(now())
+}
+
+model UsageLog {
+  id           String   @id @default(uuid())
+  userId       String?
+  user         User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  modelName    String
+  providerName String
+  inputTokens  Int      @default(0)
+  outputTokens Int      @default(0)
+  latencyMs    Int      @default(0)
+  success      Boolean  @default(true)
+  errorMessage String?
+  createdAt    DateTime @default(now())
+}
+
+model RateHit {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
+
+model Settings {
+  id    String @id @default(uuid())
+  key   String @unique
+  value String
+}
+
+// FIX: Postgres-backed store for isRateLimited() in lib/totp.ts, replacing
+// the old in-memory Map which silently reset on every cold start / on each
+// separate serverless instance. "key" holds a caller-chosen namespaced
+// string (e.g. "login:203.0.113.4"), not a userId — unauthenticated
+// login/register attempts have no user to attach a RateHit to.
+model RateLimitHit {
+  id        String   @id @default(uuid())
+  key       String
+  createdAt DateTime @default(now())
+
+  @@index([key, createdAt])
+}
+
+// RefreshToken - Store refresh tokens for validation and revocation
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique // SHA256 hash of actual token
+  deviceId  String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId, expiresAt])
+}
