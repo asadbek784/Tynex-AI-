@@ -1824,6 +1824,7 @@ export namespace Prisma {
     googleId: string | null
     googleEmail: string | null
     avatar: string | null
+    avatarUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1838,6 +1839,7 @@ export namespace Prisma {
     googleId: string | null
     googleEmail: string | null
     avatar: string | null
+    avatarUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -1852,6 +1854,7 @@ export namespace Prisma {
     googleId: number
     googleEmail: number
     avatar: number
+    avatarUrl: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -1868,6 +1871,7 @@ export namespace Prisma {
     googleId?: true
     googleEmail?: true
     avatar?: true
+    avatarUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1882,6 +1886,7 @@ export namespace Prisma {
     googleId?: true
     googleEmail?: true
     avatar?: true
+    avatarUrl?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -1896,6 +1901,7 @@ export namespace Prisma {
     googleId?: true
     googleEmail?: true
     avatar?: true
+    avatarUrl?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1983,6 +1989,7 @@ export namespace Prisma {
     googleId: string | null
     googleEmail: string | null
     avatar: string | null
+    avatarUrl: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -2014,6 +2021,7 @@ export namespace Prisma {
     googleId?: boolean
     googleEmail?: boolean
     avatar?: boolean
+    avatarUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     chats?: boolean | User$chatsArgs<ExtArgs>
@@ -2033,6 +2041,7 @@ export namespace Prisma {
     googleId?: boolean
     googleEmail?: boolean
     avatar?: boolean
+    avatarUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -2047,6 +2056,7 @@ export namespace Prisma {
     googleId?: boolean
     googleEmail?: boolean
     avatar?: boolean
+    avatarUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["user"]>
@@ -2061,11 +2071,12 @@ export namespace Prisma {
     googleId?: boolean
     googleEmail?: boolean
     avatar?: boolean
+    avatarUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "role" | "banned" | "googleId" | "googleEmail" | "avatar" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "name" | "role" | "banned" | "googleId" | "googleEmail" | "avatar" | "avatarUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chats?: boolean | User$chatsArgs<ExtArgs>
     logs?: boolean | User$logsArgs<ExtArgs>
@@ -2094,6 +2105,7 @@ export namespace Prisma {
       googleId: string | null
       googleEmail: string | null
       avatar: string | null
+      avatarUrl: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["user"]>
@@ -2532,6 +2544,7 @@ export namespace Prisma {
     readonly googleId: FieldRef<"User", 'String'>
     readonly googleEmail: FieldRef<"User", 'String'>
     readonly avatar: FieldRef<"User", 'String'>
+    readonly avatarUrl: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
   }
@@ -12695,6 +12708,7 @@ export namespace Prisma {
     googleId: 'googleId',
     googleEmail: 'googleEmail',
     avatar: 'avatar',
+    avatarUrl: 'avatarUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -12913,6 +12927,7 @@ export namespace Prisma {
     googleId?: StringNullableFilter<"User"> | string | null
     googleEmail?: StringNullableFilter<"User"> | string | null
     avatar?: StringNullableFilter<"User"> | string | null
+    avatarUrl?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     chats?: ChatListRelationFilter
@@ -12931,6 +12946,7 @@ export namespace Prisma {
     googleId?: SortOrderInput | SortOrder
     googleEmail?: SortOrderInput | SortOrder
     avatar?: SortOrderInput | SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     chats?: ChatOrderByRelationAggregateInput
@@ -12952,6 +12968,7 @@ export namespace Prisma {
     banned?: BoolFilter<"User"> | boolean
     googleEmail?: StringNullableFilter<"User"> | string | null
     avatar?: StringNullableFilter<"User"> | string | null
+    avatarUrl?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     chats?: ChatListRelationFilter
@@ -12970,6 +12987,7 @@ export namespace Prisma {
     googleId?: SortOrderInput | SortOrder
     googleEmail?: SortOrderInput | SortOrder
     avatar?: SortOrderInput | SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -12990,6 +13008,7 @@ export namespace Prisma {
     googleId?: StringNullableWithAggregatesFilter<"User"> | string | null
     googleEmail?: StringNullableWithAggregatesFilter<"User"> | string | null
     avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
+    avatarUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -13520,6 +13539,7 @@ export namespace Prisma {
     googleId?: string | null
     googleEmail?: string | null
     avatar?: string | null
+    avatarUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     chats?: ChatCreateNestedManyWithoutUserInput
@@ -13538,6 +13558,7 @@ export namespace Prisma {
     googleId?: string | null
     googleEmail?: string | null
     avatar?: string | null
+    avatarUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
@@ -13556,6 +13577,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chats?: ChatUpdateManyWithoutUserNestedInput
@@ -13574,6 +13596,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
@@ -13592,6 +13615,7 @@ export namespace Prisma {
     googleId?: string | null
     googleEmail?: string | null
     avatar?: string | null
+    avatarUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -13606,6 +13630,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13620,6 +13645,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14259,6 +14285,7 @@ export namespace Prisma {
     googleId?: SortOrder
     googleEmail?: SortOrder
     avatar?: SortOrder
+    avatarUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14273,6 +14300,7 @@ export namespace Prisma {
     googleId?: SortOrder
     googleEmail?: SortOrder
     avatar?: SortOrder
+    avatarUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14287,6 +14315,7 @@ export namespace Prisma {
     googleId?: SortOrder
     googleEmail?: SortOrder
     avatar?: SortOrder
+    avatarUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -15403,6 +15432,7 @@ export namespace Prisma {
     googleId?: string | null
     googleEmail?: string | null
     avatar?: string | null
+    avatarUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     logs?: UsageLogCreateNestedManyWithoutUserInput
@@ -15420,6 +15450,7 @@ export namespace Prisma {
     googleId?: string | null
     googleEmail?: string | null
     avatar?: string | null
+    avatarUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     logs?: UsageLogUncheckedCreateNestedManyWithoutUserInput
@@ -15481,6 +15512,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     logs?: UsageLogUpdateManyWithoutUserNestedInput
@@ -15498,6 +15530,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     logs?: UsageLogUncheckedUpdateManyWithoutUserNestedInput
@@ -15697,6 +15730,7 @@ export namespace Prisma {
     googleId?: string | null
     googleEmail?: string | null
     avatar?: string | null
+    avatarUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     chats?: ChatCreateNestedManyWithoutUserInput
@@ -15714,6 +15748,7 @@ export namespace Prisma {
     googleId?: string | null
     googleEmail?: string | null
     avatar?: string | null
+    avatarUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
@@ -15747,6 +15782,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chats?: ChatUpdateManyWithoutUserNestedInput
@@ -15764,6 +15800,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
@@ -15781,6 +15818,7 @@ export namespace Prisma {
     googleId?: string | null
     googleEmail?: string | null
     avatar?: string | null
+    avatarUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     chats?: ChatCreateNestedManyWithoutUserInput
@@ -15798,6 +15836,7 @@ export namespace Prisma {
     googleId?: string | null
     googleEmail?: string | null
     avatar?: string | null
+    avatarUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
@@ -15831,6 +15870,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chats?: ChatUpdateManyWithoutUserNestedInput
@@ -15848,6 +15888,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
@@ -15865,6 +15906,7 @@ export namespace Prisma {
     googleId?: string | null
     googleEmail?: string | null
     avatar?: string | null
+    avatarUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     chats?: ChatCreateNestedManyWithoutUserInput
@@ -15882,6 +15924,7 @@ export namespace Prisma {
     googleId?: string | null
     googleEmail?: string | null
     avatar?: string | null
+    avatarUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     chats?: ChatUncheckedCreateNestedManyWithoutUserInput
@@ -15915,6 +15958,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chats?: ChatUpdateManyWithoutUserNestedInput
@@ -15932,6 +15976,7 @@ export namespace Prisma {
     googleId?: NullableStringFieldUpdateOperationsInput | string | null
     googleEmail?: NullableStringFieldUpdateOperationsInput | string | null
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput

@@ -19,6 +19,7 @@ model User {
   googleId    String? @unique
   googleEmail String?
   avatar      String?
+  avatarUrl   String?
 
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt

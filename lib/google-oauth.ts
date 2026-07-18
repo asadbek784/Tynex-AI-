@@ -87,6 +87,7 @@ export async function handleGoogleOAuthCallback(
         data: {
           googleEmail: email,
           avatar: picture,
+          avatarUrl: picture,
           updatedAt: new Date(),
         },
       })
@@ -106,6 +107,7 @@ export async function handleGoogleOAuthCallback(
             googleId,
             googleEmail: email,
             avatar: picture,
+            avatarUrl: picture,
             updatedAt: new Date(),
           },
         })
@@ -120,6 +122,7 @@ export async function handleGoogleOAuthCallback(
             googleEmail: email,
             name,
             avatar: picture,
+            avatarUrl: picture,
             // Password hash not required for OAuth users
             passwordHash: '', // Empty string as placeholder
           },
