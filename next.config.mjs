@@ -9,11 +9,6 @@ const nextConfig = {
     unoptimized: true,
   },
   serverExternalPackages: ['@prisma/client', '@prisma/client-runtime-utils', '@prisma/adapter-pg', 'pg'],
-  turbopack: {
-    resolveAlias: {
-      '@prisma/client': './lib/generated/prisma',
-    },
-  },
   // FIX: baseline security headers applied to every response
   // (CSP, clickjacking, MIME-sniffing, referrer leakage).
   async headers() {

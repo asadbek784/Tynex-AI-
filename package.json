@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm exec prisma generate && next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "postinstall": "pnpm exec prisma generate",
+    "postinstall": "prisma generate",
     "lint": "eslint .",
-    "migrate:encrypt-keys": "tsx scripts/encrypt-existing-keys.ts"
+    "migrate:encrypt-keys": "tsx scripts/encrypt-existing-keys.ts",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

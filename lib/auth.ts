@@ -5,13 +5,13 @@ import { prisma } from './prisma'
 
 const COOKIE_NAME = 'tynex_session'
 
-// No insecure fallback: if AUTH_SECRET isn't set, every JWT operation fails
+// No insecure fallback: if JWT_SECRET isn't set, every JWT operation fails
 // loudly instead of silently signing tokens with a publicly-known default.
 function getJwtSecret(): string {
-  const secret = process.env.AUTH_SECRET
+  const secret = process.env.JWT_SECRET
   if (!secret || secret.length < 16) {
     throw new Error(
-      'AUTH_SECRET environment variable is missing or too short. Set it to a long random string before starting the app.'
+      'JWT_SECRET environment variable is missing or too short. Set it to a long random string before starting the app.'
     )
   }
   return secret
