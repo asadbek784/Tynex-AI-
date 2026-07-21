@@ -93,7 +93,7 @@ export async function POST(req: Request) {
       },
     })
   } catch (error: any) {
-    // console.error('Registration error:', error)
+    console.error("REGISTER ERROR:", error)
     return NextResponse.json(
       { error: 'Tizim xatoligi yuz berdi' },
       { status: 500 }

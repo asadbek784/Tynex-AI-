@@ -71,7 +71,7 @@ export async function POST(req: Request) {
       },
     })
   } catch (error: any) {
-    // Log error securely (not exposed to client)
+    console.error("LOGIN ERROR:", error)
     return NextResponse.json(
       { error: 'Tizim xatoligi yuz berdi' },
       { status: 500 }
