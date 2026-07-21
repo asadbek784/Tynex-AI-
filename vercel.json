@@ -4,9 +4,6 @@
   "installCommand": "pnpm install",
   "framework": "nextjs",
   "env": {
-    "DATABASE_URL": {
-      "description": "PostgreSQL connection string"
-    },
     "DIRECT_URL": {
       "description": "Direct PostgreSQL connection (optional, for Prisma Migrate)"
     },
