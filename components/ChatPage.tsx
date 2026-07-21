@@ -41,48 +41,38 @@ interface ChatPageProps {
 }
 
 export function ChatPage({ user, onLogout }: ChatPageProps) {
-  // Navigation & Layout
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  // Data lists
   const [chats, setChats] = useState<DBChat[]>([])
   const [models, setModels] = useState<AIModelType[]>([])
   const [selectedModelId, setSelectedModelId] = useState<string>('')
   const [activeChatId, setActiveChatId] = useState<string | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
 
-  // Global announcements
   const [bannerText, setBannerText] = useState('')
 
-  // Rate Limiting countdown state
   const [rateLimited, setRateLimited] = useState(false)
   const [rateLimitMessage, setRateLimitMessage] = useState('')
   const [countdown, setCountdown] = useState<string>('')
 
-  // Uploaded image state (passed down to ChatInput)
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null)
 
-  // Abort control for "Stop Generate"
   const abortControllerRef = useRef<AbortController | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const messagesContainerRef = useRef<HTMLDivElement>(null)
 
-  // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isLoading])
 
-  // Initial load: active models, chats list, and settings (for banner text)
   useEffect(() => {
     async function loadInitialData() {
       try {
-        // Fetch chats
         const resChats = await fetch('/api/chats')
         const dataChats = await resChats.json()
         if (dataChats.success) setChats(dataChats.chats)
 
-        // Fetch active models
         const resModels = await fetch('/api/models')
         const dataModels = await resModels.json()
         if (dataModels.success && dataModels.models.length > 0) {
@@ -90,7 +80,6 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
           setSelectedModelId(dataModels.models[0].id)
         }
 
-        // Fetch settings (banner_message)
         const resSettings = await fetch('/api/admin/settings')
         if (resSettings.ok) {
           const dataSettings = await resSettings.json()
@@ -98,20 +87,16 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
             setBannerText(dataSettings.settings.banner_message)
           }
         }
-      } catch (error) {
-        // console.error('Error loading initial chat data:', error)
-      }
+      } catch {}
     }
     loadInitialData()
   }, [])
 
-  // Load messages whenever activeChatId changes
   useEffect(() => {
     if (!activeChatId) {
       setMessages([])
       return
     }
-
     async function loadMessages() {
       try {
         const res = await fetch(`/api/chats/${activeChatId}/messages`)
@@ -126,14 +111,11 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
             }))
           )
         }
-      } catch (error) {
-        // console.error('Failed to load messages:', error)
-      }
+      } catch {}
     }
     loadMessages()
   }, [activeChatId])
 
-  // Handlers for Chat listing CRUD
   const handleSelectChat = (id: string) => {
     setActiveChatId(id)
     setSidebarOpen(false)
@@ -156,9 +138,7 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
       if (data.success) {
         setChats((prev) => prev.map((c) => (c.id === id ? { ...c, title: newTitle } : c)))
       }
-    } catch (error) {
-      // console.error('Failed to rename chat:', error)
-    }
+    } catch {}
   }
 
   const handleDeleteChat = async (id: string) => {
@@ -172,18 +152,14 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
           setMessages([])
         }
       }
-    } catch (error) {
-      // console.error('Failed to delete chat:', error)
-    }
+    } catch {}
   }
 
-  // Countdown timer for rate limiting
   useEffect(() => {
     if (!countdown) return
     const timer = setInterval(() => {
       const resetTime = new Date(countdown).getTime()
       const diff = resetTime - Date.now()
-
       if (diff <= 0) {
         setRateLimited(false)
         setRateLimitMessage('')
@@ -195,11 +171,9 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
         setRateLimitMessage(`Rate limitga yetdingiz. Iltimos, ${minutes} daqiqa ${seconds} soniya kuting.`)
       }
     }, 1000)
-
     return () => clearInterval(timer)
   }, [countdown])
 
-  // Stop current streaming generation
   const handleStopGenerate = () => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
@@ -207,12 +181,10 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
     }
   }
 
-  // Unified stream completion handler
   const executeStream = async (historyMessages: Message[], targetChatId: string) => {
     setIsLoading(true)
     abortControllerRef.current = new AbortController()
 
-    // Add assistant placeholder message
     const assistantMsgId = 'assistant-streaming-temp'
     setMessages((prev) => [...prev, { id: assistantMsgId, role: 'assistant', content: '' }])
 
@@ -229,7 +201,6 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
         signal: abortControllerRef.current.signal,
       })
 
-      // Handle Rate Limit error (429)
       if (res.status === 429) {
         const errorData = await res.json()
         setRateLimited(true)
@@ -244,7 +215,6 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
         throw new Error(errorData.error || 'Server xatoligi yuz berdi')
       }
 
-      // Read SSE stream chunk by chunk
       const reader = res.body?.getReader()
       const decoder = new TextDecoder()
       if (!reader) throw new Error('Oqim ma\'lumotlari o\'qib bo\'lmadi')
@@ -264,40 +234,28 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
               const parsed = JSON.parse(cleanLine.slice(6))
               const content = parsed.choices?.[0]?.delta?.content || ''
               accumulatedContent += content
-
-              // Incremental UI text update
               setMessages((prev) =>
                 prev.map((m) =>
                   m.id === assistantMsgId ? { ...m, content: accumulatedContent } : m
                 )
               )
-            } catch (e) {
-              // Ignore incomplete JSON stream chunk parsing
-            }
+            } catch {}
           }
         }
       }
 
-      // Convert temp id to permanent id upon successful stream complete
       const finalMsgId = Date.now().toString()
       setMessages((prev) =>
         prev.map((m) => (m.id === assistantMsgId ? { ...m, id: finalMsgId, content: accumulatedContent } : m))
       )
 
-      // Refresh chats sidebar list in case updated date or creation changes order
       const resChats = await fetch('/api/chats')
       const dataChats = await resChats.json()
       if (dataChats.success) setChats(dataChats.chats)
 
-      // Clear image attachment state once successfully sent
       setCurrentImageUrl(null)
-
     } catch (err: any) {
-      if (err.name === 'AbortError') {
-        // console.log('Generation stopped by user')
-      } else {
-        // console.error('Generation failed:', err)
-        // Set error message under the streaming assistant message or alert
+      if (err.name !== 'AbortError') {
         setMessages((prev) =>
           prev.map((m) =>
             m.id === assistantMsgId
@@ -312,7 +270,6 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
     }
   }
 
-  // Handle user sending a new message
   const handleSendMessage = async (content: string) => {
     if (rateLimited) return
 
@@ -327,7 +284,6 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
     const nextMessages = [...messages, newUserMessage]
     setMessages(nextMessages)
 
-    // 1. If activeChatId is null, create a new chat first!
     if (!targetChatId) {
       try {
         const titleStr = content.substring(0, 30) + (content.length > 30 ? '...' : '')
@@ -340,46 +296,33 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
         if (data.success && data.chat) {
           targetChatId = data.chat.id
           setActiveChatId(targetChatId)
-          // Add newly created chat to sidebar list immediately
           setChats((prev) => [data.chat, ...prev])
         } else {
           throw new Error('Chat yaratib bo\'lmadi')
         }
-      } catch (err: any) {
-        // console.error('Failed to auto-create chat:', err)
+      } catch {
         return
       }
     }
 
-    // 2. Execute AI Stream completions
     if (targetChatId) {
       await executeStream(nextMessages, targetChatId)
     }
   }
 
-  // MESSAGE ACTIONS: EDIT
   const handleEditMessage = async (messageId: string, newContent: string) => {
     if (!activeChatId) return
-
-    // Find message index to slice the conversation history up to the edited message
     const msgIndex = messages.findIndex((m) => m.id === messageId)
     if (msgIndex === -1) return
 
-    // Replace the user message and remove everything after it
     const updatedUserMsg: Message = { ...messages[msgIndex], content: newContent }
     const truncatedHistory = [...messages.slice(0, msgIndex), updatedUserMsg]
     setMessages(truncatedHistory)
-
-    // Fire generation stream
     await executeStream(truncatedHistory, activeChatId)
   }
 
-  // MESSAGE ACTIONS: REGENERATE
   const handleRegenerateMessage = async () => {
     if (!activeChatId || messages.length < 2) return
-
-    // Slice to the last assistant message (remove it and everything after)
-    // Find the last assistant message index
     let lastAssistantIdx = -1
     for (let i = messages.length - 1; i >= 0; i--) {
       if (messages[i].role === 'assistant') {
@@ -387,19 +330,13 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
         break
       }
     }
-
     if (lastAssistantIdx === -1) return
-
     const truncatedHistory = messages.slice(0, lastAssistantIdx)
     setMessages(truncatedHistory)
-
-    // Fire generation stream
     await executeStream(truncatedHistory, activeChatId)
   }
 
-  // MESSAGE ACTIONS: RETRY
   const handleRetryMessage = async () => {
-    // Simply fire the regenerate logic
     await handleRegenerateMessage()
   }
 
@@ -407,7 +344,6 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      {/* Sidebar */}
       <Sidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
@@ -421,16 +357,13 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
         user={user}
       />
 
-      {/* Main content */}
-      <div className="flex flex-1 flex-col overflow-hidden relative">
-        {/* Banner announcement if present */}
+      <div className="flex flex-1 flex-col overflow-hidden min-w-0">
         {bannerText && (
-          <div className="bg-card border-b border-border py-1.5 px-4 text-center text-xs font-semibold text-muted-foreground tracking-wide z-20">
-            E&apos;lon: {bannerText}
+          <div className="bg-card border-b border-border py-1.5 px-4 text-center text-xs text-foreground/60">
+            {bannerText}
           </div>
         )}
 
-        {/* Top bar */}
         <TopBar
           onMenuClick={() => setSidebarOpen(!sidebarOpen)}
           onNewChat={handleNewChatClick}
@@ -440,21 +373,19 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
           user={user}
         />
 
-        {/* Rate limit banner alert */}
         {rateLimited && (
-          <div className="mx-4 mt-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 flex-shrink-0" />
+          <div className="mx-4 mt-2 rounded-lg border border-destructive/30 bg-destructive/10 p-2.5 text-xs text-destructive flex items-center gap-2">
+            <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span>{rateLimitMessage || 'Siz rate limitga kirdingiz.'}</span>
           </div>
         )}
 
-        {/* Messages area */}
         <div
           ref={messagesContainerRef}
-          className="flex-1 overflow-y-auto px-4 py-6 md:px-8 bg-background"
+          className="flex-1 overflow-y-auto"
         >
           {hasMessages ? (
-            <div className="mx-auto max-w-2xl space-y-4">
+            <div className="mx-auto max-w-3xl px-4 py-4">
               {messages.map((message) => (
                 <ChatMessage
                   key={message.id}
@@ -470,11 +401,11 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
               ))}
 
               {isLoading && (
-                <div className="flex justify-start items-center gap-3 py-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-                    <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                <div className="flex items-center gap-3 py-4 pl-12">
+                  <div className="h-6 w-6 rounded-sm bg-primary/20 flex items-center justify-center">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
                   </div>
-                  <span className="text-xs text-muted-foreground">TYNEX AI fikrlamoqda...</span>
+                  <span className="text-xs text-foreground/50">Fikrlamoqda...</span>
                 </div>
               )}
               <div ref={messagesEndRef} />
@@ -484,17 +415,15 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
           )}
         </div>
 
-        {/* Input area */}
         <div className="relative">
-          {/* Stop Generate Button overlay */}
           {isLoading && (
-            <div className="absolute -top-12 left-1/2 -translate-x-1/2 z-10">
+            <div className="absolute -top-10 left-1/2 -translate-x-1/2 z-10">
               <button
                 onClick={handleStopGenerate}
-                className="flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/20 active:scale-95 transition-all"
+                className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-1 text-xs text-foreground/60 hover:text-foreground transition-colors shadow-sm"
               >
-                <div className="h-2 w-2 rounded-full bg-destructive" />
-                Generatsiyani to&apos;xtatish
+                <div className="h-1.5 w-1.5 rounded-full bg-destructive" />
+                To&apos;xtatish
               </button>
             </div>
           )}
@@ -503,7 +432,7 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
             onSend={handleSendMessage}
             disabled={isLoading || rateLimited}
             currentImageUrl={currentImageUrl}
-            onSetImageUrl={setImageUrlPropsHelper => setCurrentImageUrl(setImageUrlPropsHelper)}
+            onSetImageUrl={(url) => setCurrentImageUrl(url)}
           />
         </div>
       </div>

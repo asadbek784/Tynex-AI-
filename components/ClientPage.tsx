@@ -26,8 +26,7 @@ export function ClientPage() {
             setUser(data.user)
           }
         }
-      } catch (error) {
-        // console.error('Failed to check auth:', error)
+      } catch {
       } finally {
         setCheckingAuth(false)
       }
@@ -43,18 +42,13 @@ export function ClientPage() {
     try {
       await fetch('/api/auth/logout', { method: 'POST' })
       setUser(null)
-    } catch (error) {
-      // console.error('Failed to log out:', error)
-    }
+    } catch {}
   }
 
   if (checkingAuth) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-10 w-10 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground">Yuklanmoqda...</p>
-        </div>
+        <Loader2 className="h-6 w-6 animate-spin text-foreground/40" />
       </div>
     )
   }

@@ -7,8 +7,9 @@ import {
   ChevronDown,
   X,
   Trash2,
-  Edit2,
+  Edit3,
   Check,
+  MessageSquare,
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -119,48 +120,44 @@ export function Sidebar({
       )}
 
       <aside
-        className={`fixed left-0 top-0 z-40 h-screen w-64 transform border-r border-border bg-background transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
+        className={`fixed left-0 top-0 z-40 h-screen w-64 transform bg-sidebar transition-transform duration-200 ease-linear md:relative md:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } flex flex-col overflow-hidden`}
       >
-        <div className="border-b border-border p-4">
-          <div className="flex items-center justify-between gap-2 mb-4">
-            <span className="text-sm font-semibold text-foreground">TYNEX AI</span>
-            <button onClick={onClose} className="md:hidden rounded p-1 hover:bg-muted">
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-
+        <div className="flex items-center justify-between p-3">
           <button
             onClick={onNewChat}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors"
+            className="flex items-center gap-3 rounded-lg border border-sidebar-border px-3 py-2.5 text-sm text-sidebar-foreground hover:bg-muted/30 transition-colors flex-1"
           >
             <Plus className="h-4 w-4" />
-            Yangi chat
+            <span>Yangi chat</span>
+          </button>
+          <button onClick={onClose} className="md:hidden rounded p-2 text-sidebar-foreground hover:bg-muted/30 ml-2">
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="border-b border-border p-4">
+        <div className="px-3 pb-2">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-sidebar-foreground/40" />
             <input
               type="text"
               placeholder="Qidirish..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-border bg-card pl-9 pr-3 py-2 text-sm outline-none placeholder:text-muted-foreground text-foreground"
+              className="w-full rounded-lg bg-transparent pl-9 pr-3 py-2 text-sm outline-none text-sidebar-foreground placeholder:text-sidebar-foreground/40 border border-transparent focus:border-sidebar-border"
             />
           </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-3 py-4">
+        <div className="flex-1 overflow-y-auto px-2 py-1">
           {Object.entries(groupedChats).map(([date, datechats]) =>
             datechats.length > 0 ? (
-              <div key={date} className="mb-6">
-                <h3 className="mb-2 px-2 text-[10px] font-medium uppercase text-muted-foreground tracking-wider">
+              <div key={date} className="mb-4">
+                <h3 className="px-3 pb-1 text-[11px] font-medium text-sidebar-foreground/40">
                   {date}
                 </h3>
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                   {datechats.map((chat) => {
                     const isSelected = chat.id === activeChatId
                     const isEditing = chat.id === editingChatId
@@ -169,10 +166,10 @@ export function Sidebar({
                       <div
                         key={chat.id}
                         onClick={() => !isEditing && onSelectChat(chat.id)}
-                        className={`group relative flex items-center justify-between w-full rounded-lg px-3 py-2 text-left text-sm transition-all cursor-pointer ${
+                        className={`group relative flex items-center gap-2 w-full rounded-lg px-3 py-2 text-sm cursor-pointer transition-colors ${
                           isSelected
-                            ? 'bg-primary/10 text-foreground'
-                            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                            ? 'bg-muted/50 text-sidebar-foreground'
+                            : 'text-sidebar-foreground/70 hover:bg-muted/30 hover:text-sidebar-foreground'
                         }`}
                       >
                         {isEditing ? (
@@ -182,32 +179,31 @@ export function Sidebar({
                               value={editTitleValue}
                               onChange={(e) => setEditTitleValue(e.target.value)}
                               onKeyDown={(e) => e.key === 'Enter' && handleSaveRename(e as any, chat.id)}
-                              className="w-full bg-card border border-primary/50 rounded px-1.5 py-0.5 text-xs text-foreground outline-none"
+                              className="w-full bg-sidebar border border-sidebar-border rounded px-1.5 py-0.5 text-xs text-sidebar-foreground outline-none"
                               autoFocus
                             />
                             <button
                               onClick={(e) => handleSaveRename(e, chat.id)}
-                              className="text-green-500 p-0.5 hover:bg-muted rounded"
+                              className="text-sidebar-foreground/60 p-0.5 hover:text-sidebar-foreground"
                             >
                               <Check className="h-3.5 w-3.5" />
                             </button>
                           </div>
                         ) : (
                           <>
-                            <span className="truncate pr-10" title={chat.title}>
-                              {chat.title}
-                            </span>
-                            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <MessageSquare className="h-4 w-4 flex-shrink-0 opacity-50" />
+                            <span className="truncate flex-1">{chat.title}</span>
+                            <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
                               <button
                                 onClick={(e) => handleStartRename(e, chat)}
-                                className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground"
+                                className="p-1 rounded hover:bg-muted/50 text-sidebar-foreground/50 hover:text-sidebar-foreground"
                                 title="Nomini o'zgartirish"
                               >
-                                <Edit2 className="h-3.5 w-3.5" />
+                                <Edit3 className="h-3.5 w-3.5" />
                               </button>
                               <button
                                 onClick={(e) => handleDeleteClick(e, chat.id)}
-                                className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-destructive"
+                                className="p-1 rounded hover:bg-muted/50 text-sidebar-foreground/50 hover:text-sidebar-foreground"
                                 title="O'chirish"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
@@ -222,39 +218,24 @@ export function Sidebar({
               </div>
             ) : null
           )}
-          {filteredChats.length === 0 && (
-            <p className="text-center text-xs text-muted-foreground mt-4">Chatlar topilmadi</p>
+          {filteredChats.length === 0 && chats.length > 0 && (
+            <p className="text-center text-xs text-sidebar-foreground/40 mt-4">Natija topilmadi</p>
           )}
         </div>
 
-        <div className="border-t border-border p-4 space-y-2">
-          <div className="flex w-full flex-col gap-2 px-3 py-3 text-xs text-muted-foreground border border-border rounded-lg bg-card">
-            <div className="flex items-center justify-between">
-              <span className="font-medium text-foreground">Limit</span>
-              <span className="text-xs text-muted-foreground">3 soatda 25 ta</span>
-            </div>
-            <div className="w-full h-1 rounded-full bg-muted overflow-hidden">
-              <div className="h-full bg-primary w-1/3 rounded-full" />
-            </div>
-          </div>
-
+        <div className="border-t border-sidebar-border p-3">
           <div className="relative">
             <button
               onClick={() => setExpandedProfile(!expandedProfile)}
-              className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-all border border-border/50"
+              className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-sm text-sidebar-foreground/70 hover:bg-muted/30 hover:text-sidebar-foreground transition-colors"
             >
-              <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-lg bg-muted text-muted-foreground flex items-center justify-center font-medium text-xs uppercase">
-                  {user?.name ? user.name.substring(0, 2) : 'US'}
-                </div>
-                <div className="text-left">
-                  <p className="text-sm font-medium text-foreground truncate max-w-[120px]">
-                    {user?.name || 'Foydalanuvchi'}
-                  </p>
-                  <p className="text-xs text-muted-foreground truncate max-w-[120px]">
-                    {user?.email || 'user@example.com'}
-                  </p>
-                </div>
+              <div className="h-7 w-7 rounded-full bg-muted/50 flex items-center justify-center text-xs text-sidebar-foreground/60">
+                {user?.name ? user.name.substring(0, 2).toUpperCase() : 'U'}
+              </div>
+              <div className="flex-1 text-left">
+                <p className="text-sm font-medium truncate max-w-[140px]">
+                  {user?.name || 'Foydalanuvchi'}
+                </p>
               </div>
               <ChevronDown
                 className={`h-4 w-4 transition-transform ${
@@ -264,13 +245,16 @@ export function Sidebar({
             </button>
 
             {expandedProfile && (
-              <div className="absolute bottom-full left-0 right-0 mb-2 rounded-lg border border-border bg-background shadow-lg z-50">
+              <div className="absolute bottom-full left-0 right-0 mb-1 rounded-lg border border-sidebar-border bg-sidebar shadow-lg z-50 overflow-hidden">
+                <div className="px-3 py-2 border-b border-sidebar-border">
+                  <p className="text-xs text-sidebar-foreground/50 truncate">{user?.email || ''}</p>
+                </div>
                 <button
                   onClick={onLogout}
-                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-muted-foreground hover:bg-muted hover:text-destructive transition-colors"
+                  className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-sidebar-foreground/70 hover:bg-muted/30 hover:text-sidebar-foreground transition-colors"
                 >
                   <LogOut className="h-4 w-4" />
-                  <span className="text-sm">Chiqish</span>
+                  <span>Chiqish</span>
                 </button>
               </div>
             )}
