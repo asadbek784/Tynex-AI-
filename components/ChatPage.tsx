@@ -406,7 +406,7 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
   const hasMessages = messages.length > 0
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#0B0F19]">
+    <div className="flex h-screen overflow-hidden bg-background">
       {/* Sidebar */}
       <Sidebar
         isOpen={sidebarOpen}
@@ -425,7 +425,7 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
       <div className="flex flex-1 flex-col overflow-hidden relative">
         {/* Banner announcement if present */}
         {bannerText && (
-          <div className="bg-gradient-to-r from-cyan-600 to-blue-700 py-1.5 px-4 text-center text-xs font-semibold text-white tracking-wide shadow z-20">
+          <div className="bg-card border-b border-border py-1.5 px-4 text-center text-xs font-semibold text-muted-foreground tracking-wide z-20">
             E&apos;lon: {bannerText}
           </div>
         )}
@@ -442,8 +442,8 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
 
         {/* Rate limit banner alert */}
         {rateLimited && (
-          <div className="mx-4 mt-4 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-400 flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-red-400 flex-shrink-0" />
+          <div className="mx-4 mt-4 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-sm text-destructive flex items-center gap-2">
+            <AlertCircle className="h-5 w-5 flex-shrink-0" />
             <span>{rateLimitMessage || 'Siz rate limitga kirdingiz.'}</span>
           </div>
         )}
@@ -451,7 +451,7 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
         {/* Messages area */}
         <div
           ref={messagesContainerRef}
-          className="flex-1 overflow-y-auto px-4 py-6 md:px-8 bg-gradient-to-b from-[#0B0F19] to-[#0d1321]"
+          className="flex-1 overflow-y-auto px-4 py-6 md:px-8 bg-background"
         >
           {hasMessages ? (
             <div className="mx-auto max-w-2xl space-y-4">
@@ -471,11 +471,10 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
 
               {isLoading && (
                 <div className="flex justify-start items-center gap-3 py-3">
-                  {/* Floating Thinking indicator */}
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[#00D4FF] to-cyan-500 text-background">
-                    <Loader2 className="h-4 w-4 animate-spin text-background" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                    <Loader2 className="h-4 w-4 animate-spin text-primary" />
                   </div>
-                  <span className="text-xs text-[#94A3B8] font-semibold animate-pulse">TYNEX AI fikrlamoqda...</span>
+                  <span className="text-xs text-muted-foreground">TYNEX AI fikrlamoqda...</span>
                 </div>
               )}
               <div ref={messagesEndRef} />
@@ -492,9 +491,9 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
             <div className="absolute -top-12 left-1/2 -translate-x-1/2 z-10">
               <button
                 onClick={handleStopGenerate}
-                className="flex items-center gap-2 rounded-full border border-red-500/30 bg-red-500/10 px-4 py-1.5 text-xs font-semibold text-red-400 hover:bg-red-500/20 active:scale-95 transition-all shadow-lg"
+                className="flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/20 active:scale-95 transition-all"
               >
-                <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
+                <div className="h-2 w-2 rounded-full bg-destructive" />
                 Generatsiyani to&apos;xtatish
               </button>
             </div>

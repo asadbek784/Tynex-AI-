@@ -3,7 +3,6 @@
 import {
   Plus,
   Search,
-  Settings,
   LogOut,
   ChevronDown,
   X,
@@ -57,7 +56,6 @@ export function Sidebar({
   const [editingChatId, setEditingChatId] = useState<string | null>(null)
   const [editTitleValue, setEditTitleValue] = useState('')
 
-  // Helper to categorize dates
   const categorizeChats = (chatsList: DBChat[]) => {
     const today: DBChat[] = []
     const yesterday: DBChat[] = []
@@ -71,15 +69,10 @@ export function Sidebar({
 
     chatsList.forEach((chat) => {
       const chatDate = new Date(chat.updatedAt)
-      if (chatDate >= startOfToday) {
-        today.push(chat)
-      } else if (chatDate >= startOfYesterday) {
-        yesterday.push(chat)
-      } else if (chatDate >= startOf7DaysAgo) {
-        last7Days.push(chat)
-      } else {
-        older.push(chat)
-      }
+      if (chatDate >= startOfToday) today.push(chat)
+      else if (chatDate >= startOfYesterday) yesterday.push(chat)
+      else if (chatDate >= startOf7DaysAgo) last7Days.push(chat)
+      else older.push(chat)
     })
 
     return {
@@ -90,7 +83,6 @@ export function Sidebar({
     }
   }
 
-  // Filter and then group
   const filteredChats = chats.filter((c) =>
     c.title.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -119,46 +111,35 @@ export function Sidebar({
 
   return (
     <>
-      {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/50 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-30 bg-black/50 md:hidden"
           onClick={onClose}
         />
       )}
 
-      {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 z-40 h-screen w-64 transform border-r border-border bg-card transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
+        className={`fixed left-0 top-0 z-40 h-screen w-64 transform border-r border-border bg-background transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         } flex flex-col overflow-hidden`}
       >
-        {/* Header */}
         <div className="border-b border-border p-4">
           <div className="flex items-center justify-between gap-2 mb-4">
-            <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded bg-gradient-to-br from-[#00D4FF] to-cyan-500" />
-              <span className="font-bold text-primary tracking-wide">TYNEX AI</span>
-            </div>
-            <button
-              onClick={onClose}
-              className="md:hidden rounded p-1 hover:bg-muted"
-            >
+            <span className="text-sm font-semibold text-foreground">TYNEX AI</span>
+            <button onClick={onClose} className="md:hidden rounded p-1 hover:bg-muted">
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          {/* New chat button */}
           <button
             onClick={onNewChat}
-            className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-primary/10 py-2 font-semibold text-primary hover:bg-primary/20 transition-colors"
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-card py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors"
           >
-            <Plus className="h-5 w-5" />
+            <Plus className="h-4 w-4" />
             Yangi chat
           </button>
         </div>
 
-        {/* Search */}
         <div className="border-b border-border p-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -167,17 +148,16 @@ export function Sidebar({
               placeholder="Qidirish..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-border bg-muted/30 pl-9 pr-3 py-2 text-sm outline-none placeholder:text-muted-foreground focus:border-primary/50 focus:shadow-lg focus:shadow-primary/10 text-white"
+              className="w-full rounded-lg border border-border bg-card pl-9 pr-3 py-2 text-sm outline-none placeholder:text-muted-foreground text-foreground"
             />
           </div>
         </div>
 
-        {/* Chat history */}
         <div className="flex-1 overflow-y-auto px-3 py-4">
           {Object.entries(groupedChats).map(([date, datechats]) =>
             datechats.length > 0 ? (
               <div key={date} className="mb-6">
-                <h3 className="mb-2 px-2 text-[10px] font-semibold uppercase text-[#94A3B8] tracking-wider">
+                <h3 className="mb-2 px-2 text-[10px] font-medium uppercase text-muted-foreground tracking-wider">
                   {date}
                 </h3>
                 <div className="space-y-1">
@@ -189,10 +169,10 @@ export function Sidebar({
                       <div
                         key={chat.id}
                         onClick={() => !isEditing && onSelectChat(chat.id)}
-                        className={`group relative flex items-center justify-between w-full rounded-lg px-3 py-2 text-left text-sm transition-all cursor-pointer border-l-2 ${
+                        className={`group relative flex items-center justify-between w-full rounded-lg px-3 py-2 text-left text-sm transition-all cursor-pointer ${
                           isSelected
-                            ? 'bg-primary/15 border-l-primary text-primary font-medium shadow-md shadow-primary/10'
-                            : 'text-secondary border-l-transparent hover:bg-muted/40 hover:text-foreground hover:border-l-primary/50'
+                            ? 'bg-primary/10 text-foreground'
+                            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
                         }`}
                       >
                         {isEditing ? (
@@ -202,12 +182,12 @@ export function Sidebar({
                               value={editTitleValue}
                               onChange={(e) => setEditTitleValue(e.target.value)}
                               onKeyDown={(e) => e.key === 'Enter' && handleSaveRename(e as any, chat.id)}
-                              className="w-full bg-card border border-primary/50 rounded px-1.5 py-0.5 text-xs text-white outline-none"
+                              className="w-full bg-card border border-primary/50 rounded px-1.5 py-0.5 text-xs text-foreground outline-none"
                               autoFocus
                             />
                             <button
                               onClick={(e) => handleSaveRename(e, chat.id)}
-                              className="text-emerald-400 p-0.5 hover:bg-muted rounded"
+                              className="text-green-500 p-0.5 hover:bg-muted rounded"
                             >
                               <Check className="h-3.5 w-3.5" />
                             </button>
@@ -217,19 +197,17 @@ export function Sidebar({
                             <span className="truncate pr-10" title={chat.title}>
                               {chat.title}
                             </span>
-
-                            {/* Actions on Hover */}
-                            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-transparent">
+                            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                               <button
                                 onClick={(e) => handleStartRename(e, chat)}
-                                className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-white transition-colors"
+                                className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground"
                                 title="Nomini o'zgartirish"
                               >
                                 <Edit2 className="h-3.5 w-3.5" />
                               </button>
                               <button
                                 onClick={(e) => handleDeleteClick(e, chat.id)}
-                                className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-red-400 transition-colors"
+                                className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-destructive"
                                 title="O'chirish"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
@@ -245,35 +223,32 @@ export function Sidebar({
             ) : null
           )}
           {filteredChats.length === 0 && (
-            <p className="text-center text-xs text-[#94A3B8] mt-4">Chatlar topilmadi</p>
+            <p className="text-center text-xs text-muted-foreground mt-4">Chatlar topilmadi</p>
           )}
         </div>
 
-        {/* Footer */}
         <div className="border-t border-border p-4 space-y-2">
-          {/* Settings / Info */}
-          <div className="flex w-full flex-col gap-2 px-3 py-3 text-xs text-secondary border border-border/40 rounded-lg bg-card/60">
+          <div className="flex w-full flex-col gap-2 px-3 py-3 text-xs text-muted-foreground border border-border rounded-lg bg-card">
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-[#00D4FF] uppercase">Limit:</span>
-              <span className="text-[10px] text-[#94A3B8]">3 soatda 25 ta</span>
+              <span className="font-medium text-foreground">Limit</span>
+              <span className="text-xs text-muted-foreground">3 soatda 25 ta</span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-muted/50 overflow-hidden border border-border/20">
-              <div className="h-full bg-gradient-to-r from-[#00D4FF] to-cyan-400 w-1/3 rounded-full animate-pulse" />
+            <div className="w-full h-1 rounded-full bg-muted overflow-hidden">
+              <div className="h-full bg-primary w-1/3 rounded-full" />
             </div>
           </div>
 
-          {/* Profile with dropdown */}
           <div className="relative">
             <button
               onClick={() => setExpandedProfile(!expandedProfile)}
-              className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-secondary hover:bg-muted/60 hover:text-foreground transition-all hover:border-primary/30 border border-border/20"
+              className="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-all border border-border/50"
             >
               <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-[#00D4FF] to-cyan-500 text-background flex items-center justify-center font-bold text-xs uppercase">
+                <div className="h-8 w-8 rounded-lg bg-muted text-muted-foreground flex items-center justify-center font-medium text-xs uppercase">
                   {user?.name ? user.name.substring(0, 2) : 'US'}
                 </div>
                 <div className="text-left">
-                  <p className="text-sm font-semibold text-foreground truncate max-w-[120px]">
+                  <p className="text-sm font-medium text-foreground truncate max-w-[120px]">
                     {user?.name || 'Foydalanuvchi'}
                   </p>
                   <p className="text-xs text-muted-foreground truncate max-w-[120px]">
@@ -288,12 +263,11 @@ export function Sidebar({
               />
             </button>
 
-            {/* Dropdown menu */}
             {expandedProfile && (
-              <div className="absolute bottom-full left-0 right-0 mb-2 rounded-lg border border-border bg-[#0B0F19]/90 backdrop-blur-md shadow-lg z-50">
+              <div className="absolute bottom-full left-0 right-0 mb-2 rounded-lg border border-border bg-background shadow-lg z-50">
                 <button
                   onClick={onLogout}
-                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-secondary hover:bg-muted/50 hover:text-red-400 transition-colors"
+                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-muted-foreground hover:bg-muted hover:text-destructive transition-colors"
                 >
                   <LogOut className="h-4 w-4" />
                   <span className="text-sm">Chiqish</span>

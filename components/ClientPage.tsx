@@ -50,10 +50,10 @@ export function ClientPage() {
 
   if (checkingAuth) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-[#0B0F19]">
+      <div className="flex h-screen w-screen items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
-          <Loader2 className="h-10 w-10 animate-spin text-[#00D4FF]" />
-          <p className="text-sm font-semibold text-[#94A3B8]">Yuklanmoqda...</p>
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">Yuklanmoqda...</p>
         </div>
       </div>
     )
@@ -61,14 +61,7 @@ export function ClientPage() {
 
   if (!user) {
     return (
-      <div className="relative flex h-screen items-center justify-center overflow-hidden bg-[#0B0F19]">
-        {/* Blurred chat background */}
-        <div className="absolute inset-0 opacity-20 blur-3xl">
-          <div className="absolute top-20 right-20 h-96 w-96 rounded-full bg-[#00D4FF]/30 blur-3xl" />
-          <div className="absolute bottom-20 left-20 h-96 w-96 rounded-full bg-[#00D4FF]/20 blur-3xl" />
-        </div>
-
-        {/* Login modal */}
+      <div className="flex h-screen items-center justify-center bg-background">
         <LoginModal onLogin={handleLoginSuccess} />
       </div>
     )
