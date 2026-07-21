@@ -2,28 +2,5 @@
   "buildCommand": "prisma generate && next build",
   "devCommand": "next dev",
   "installCommand": "pnpm install",
-  "framework": "nextjs",
-  "env": {
-    "DIRECT_URL": {
-      "description": "Direct PostgreSQL connection (optional, for Prisma Migrate)"
-    },
-    "GOOGLE_CLIENT_ID": {
-      "description": "Google OAuth Client ID"
-    },
-    "GOOGLE_CLIENT_SECRET": {
-      "description": "Google OAuth Client Secret"
-    },
-    "GOOGLE_OAUTH_REDIRECT_URI": {
-      "description": "Google OAuth Redirect URI"
-    },
-    "JWT_SECRET": {
-      "description": "JWT signing secret key"
-    },
-    "ADMIN_TOTP_SECRET": {
-      "description": "Admin 2FA TOTP secret"
-    },
-    "NODE_ENV": {
-      "value": "production"
-    }
-  }
+  "framework": "nextjs"
 }
