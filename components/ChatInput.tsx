@@ -98,11 +98,11 @@ export function ChatInput({
   const hasValue = value.trim().length > 0
 
   return (
-    <div className="border-t border-border/50 bg-background px-4 py-3">
+    <div className="border-t border-border bg-background px-4 py-3">
       {currentImageUrl && (
         <div className="mb-3 mx-auto max-w-3xl">
-          <div className="inline-flex items-center gap-2 bg-card rounded-lg px-3 py-1.5 border border-border">
-            <img src={currentImageUrl} alt="Preview" className="h-8 w-8 object-cover rounded" />
+          <div className="inline-flex items-center gap-2 bg-card rounded-none px-3 py-1.5 border border-border">
+            <img src={currentImageUrl} alt="Preview" className="h-8 w-8 object-cover rounded-none" />
             <span className="text-xs text-foreground/60">1 rasm</span>
             <button
               onClick={() => onSetImageUrl?.(null)}
@@ -115,15 +115,15 @@ export function ChatInput({
       )}
 
       <div className="mx-auto max-w-3xl">
-        <div className="relative rounded-xl border border-border/60 bg-card shadow-sm transition-shadow focus-within:shadow-md focus-within:border-border">
+        <div className="relative rounded-none border border-border bg-background shadow-none transition-colors">
           <textarea
             ref={textareaRef}
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={disabled}
-            placeholder="TYNEX AI ga xabar yubor..."
-            className="w-full resize-none bg-transparent px-4 pt-3 pb-10 text-sm text-foreground outline-none placeholder:text-foreground/40 disabled:opacity-50 max-h-52"
+            placeholder="Xabar yuborish..."
+            className="w-full resize-none bg-transparent px-4 pt-3 pb-10 text-sm text-foreground outline-none placeholder:text-foreground/40 disabled:opacity-50 max-h-52 font-normal"
             rows={1}
           />
 
@@ -139,7 +139,7 @@ export function ChatInput({
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={disabled || isUploading}
-                className="p-1.5 rounded-lg text-foreground/40 hover:text-foreground hover:bg-muted/50 disabled:opacity-50 transition-colors"
+                className="p-1.5 rounded-none text-foreground/50 hover:text-foreground hover:bg-muted disabled:opacity-50 transition-colors"
                 title="Fayl biriktirish"
               >
                 {isUploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Paperclip className="h-5 w-5" />}
@@ -147,10 +147,10 @@ export function ChatInput({
               <button
                 onClick={handleMicClick}
                 disabled={disabled}
-                className={`p-1.5 rounded-lg transition-colors ${
+                className={`p-1.5 rounded-none transition-colors ${
                   isListening
-                    ? 'text-primary bg-primary/10'
-                    : 'text-foreground/40 hover:text-foreground hover:bg-muted/50'
+                    ? 'text-foreground bg-muted'
+                    : 'text-foreground/50 hover:text-foreground hover:bg-muted'
                 } disabled:opacity-50`}
                 title={isListening ? "To'xtatish" : 'Ovozli kiritish'}
               >
@@ -161,11 +161,11 @@ export function ChatInput({
             <button
               onClick={handleSubmit}
               disabled={disabled || !hasValue}
-              className={`p-1.5 rounded-lg transition-all ${
+              className={`p-1.5 rounded-none transition-all ${
                 hasValue
-                  ? 'bg-primary text-white hover:opacity-90'
-                  : 'bg-muted/50 text-foreground/40'
-              } disabled:opacity-40 disabled:cursor-not-allowed`}
+                  ? 'bg-foreground text-background hover:opacity-90'
+                  : 'bg-muted text-foreground/30'
+              } disabled:opacity-30 disabled:cursor-not-allowed`}
               title="Yuborish"
             >
               <ArrowUp className="h-5 w-5" />
@@ -173,8 +173,8 @@ export function ChatInput({
           </div>
         </div>
 
-        <p className="mt-2 text-center text-xs text-foreground/30">
-          TYNEX AI xato qilishi mumkin. Muhim ma&apos;lumotlarni tekshiring.
+        <p className="mt-2 text-center text-xs text-foreground/40">
+          ChatGPT uslubidagi toza minimalist interfeys.
         </p>
       </div>
     </div>

@@ -13,20 +13,20 @@ const suggestions = [
 
 export function WelcomeScreen({ onSelectSuggestion }: WelcomeScreenProps) {
   return (
-    <div className="flex flex-col items-center justify-center h-full px-4">
-      <div className="flex flex-col items-center gap-8 max-w-lg">
+    <div className="flex flex-col items-center justify-center h-full px-4 bg-background">
+      <div className="flex flex-col items-center gap-6 max-w-xl w-full">
         <div className="text-center space-y-2">
-          <h1 className="text-2xl font-semibold text-foreground">
+          <h1 className="text-2xl font-normal tracking-tight text-foreground">
             Bugun sizga qanday yordam bera olaman?
           </h1>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-lg mt-2">
           {suggestions.map((suggestion, index) => (
             <button
               key={index}
               onClick={() => onSelectSuggestion(suggestion)}
-              className="px-4 py-2 rounded-full border border-border text-sm text-foreground/70 hover:bg-muted/30 hover:text-foreground hover:border-border transition-colors"
+              className="p-3 text-left border border-border bg-background hover:bg-muted text-sm text-foreground transition-colors rounded-none"
             >
               {suggestion}
             </button>

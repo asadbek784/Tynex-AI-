@@ -385,7 +385,7 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
           className="flex-1 overflow-y-auto"
         >
           {hasMessages ? (
-            <div className="mx-auto max-w-3xl px-4 py-4">
+            <div className="mx-auto max-w-3xl w-full">
               {messages.map((message) => (
                 <ChatMessage
                   key={message.id}
@@ -401,11 +401,9 @@ export function ChatPage({ user, onLogout }: ChatPageProps) {
               ))}
 
               {isLoading && (
-                <div className="flex items-center gap-3 py-4 pl-12">
-                  <div className="h-6 w-6 rounded-sm bg-primary/20 flex items-center justify-center">
-                    <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
-                  </div>
-                  <span className="text-xs text-foreground/50">Fikrlamoqda...</span>
+                <div className="flex items-center gap-3 py-6 px-4 border-b border-border bg-background">
+                  <div className="h-6 w-6 rounded-none bg-primary text-primary-foreground flex items-center justify-center text-xs font-mono">AI</div>
+                  <span className="text-sm text-foreground/70 animate-pulse">Javob yozilmoqda...</span>
                 </div>
               )}
               <div ref={messagesEndRef} />
